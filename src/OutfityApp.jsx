@@ -142,9 +142,9 @@ const IconPrecip = () => (
   </svg>
 );
 
-function InfoTile({ label, value, icon }) {
+function InfoTile({ label, value, icon, className = "" }) {
   return (
-    <div className="flex flex-col justify-between rounded-2xl p-4 bg-white border border-white/60 shadow-sm select-none min-w-[145px]">
+    <div className={`flex flex-col justify-between rounded-2xl p-4 bg-white border border-white/60 shadow-sm select-none w-full ${className}`}>
       <div className="flex items-center gap-2 text-[11px] md:text-[12px] uppercase tracking-wide opacity-60">
         {icon}
         <span className="whitespace-nowrap">{label}</span>
@@ -224,12 +224,15 @@ export default function OutfityApp() {
 
           {loading && <p className="text-sm opacity-70">Загружаем погоду…</p>}
 
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-5">
-            <InfoTile label="Температура" value={`${tempC}°C`} icon={<IconTemp/>} />
-            <InfoTile label="Ветер"        value={`${wind.toFixed(1)} м/с (${windBucketRu(windBucket(wind))})`} icon={<IconWind/>} />
-            <InfoTile label="Влажность"    value={`${humidity}%`} icon={<IconHumidity/>} />
-            <InfoTile label="Осадки"       value={precipitationRu(precipitationBucket(precType, condition))} icon={<IconPrecip/>} />
-          </div>
+          <div className="grid grid-cols-2 gap-4 md:gap-5">
+  {/* первая строка */}
+  <InfoTile label="Температура" value={`${tempC}°C`} icon={<IconTemp/>} />
+  <InfoTile label="Ветер" value={`${wind.toFixed(1)} м/с (${windBucketRu(windBucket(wind))})`} icon={<IconWind/>} />
+
+  {/* вторая строка */}
+  <InfoTile label="Влажность" value={`${humidity}%`} icon={<IconHumidity/>} />
+  <InfoTile label="Осадки" value={precipitationRu(precipitationBucket(precType, condition))} icon={<IconPrecip/>} />
+</div>
 
           <p className="text-xs md:text-sm opacity-60 mt-4">Источник: Netlify Function → Weather API</p>
         </section>
