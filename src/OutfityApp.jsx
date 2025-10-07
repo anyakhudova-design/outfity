@@ -41,7 +41,7 @@ export default function OutfityApp() {
 
   useEffect(() => {
     navigator.geolocation.getCurrentPosition(async pos => {
-      const url = new URL('/api/weather', window.location.origin);
+      const url = new URL("/.netlify/functions/weather", window.location.origin);
       url.searchParams.set('lat', pos.coords.latitude);
       url.searchParams.set('lon', pos.coords.longitude);
       const res = await fetch(url).catch(()=>null);
