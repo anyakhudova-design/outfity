@@ -1,0 +1,1 @@
+import OutfityApp from './OutfityApp.jsx';export default function App(){return <OutfityApp/>}
