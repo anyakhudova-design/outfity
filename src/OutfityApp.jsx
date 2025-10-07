@@ -251,7 +251,7 @@ export default function OutfityApp() {
           <h2 className="text-2xl md:text-3xl font-semibold mb-4">Рекомендованный outfit</h2>
           <div className="grid md:grid-cols-2 gap-6 items-start">
             <div>
-              <p className="text-base md:text-lg leading-relaxed break-words"><b>Описание:</b> {rec?.outfit}</p>
+              <p className="text-base md:text-lg leading-relaxed break-words"><b>Одежда:</b> {rec?.outfit}</p>
               <p className="text-base md:text-lg leading-relaxed mt-2 break-words"><b>Аксессуары:</b> {rec?.accessories}</p>
               <p className="text-sm md:text-base mt-4">Сезон: <span className={`font-semibold ${theme.accents}`}>{theme.ru}</span></p>
             </div>
