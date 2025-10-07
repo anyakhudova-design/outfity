@@ -166,7 +166,11 @@ function InfoTile({ label, value, icon, className = "", season = "autumn" }) {
 }
 
 // ===== 5) Манекен (силуэт) + «чипсы» одежды =====
-function Mannequin({ season, items }) {
+<AvatarPanel
+  gender={gender}
+  season={season}
+  outfitText={`${rec?.outfit}, ${rec?.accessories}`}
+/> {
   const theme = SEASON_THEME[season];
   return (
     <div className={`relative w-full max-w-sm mx-auto rounded-3xl p-5 shadow-lg ${theme.chip}`}>
@@ -189,6 +193,75 @@ function Mannequin({ season, items }) {
 }
 
 // ===== 6) Главный компонент =====
+// ===== Inline-изображения (временное решение, чтобы всё заработало прямо сейчас) =====
+const AVATAR_SRC = {
+  female:
+    'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="320" height="420" viewBox="0 0 160 210"><rect width="160" height="210" rx="18" fill="%23ffe8d5"/><circle cx="80" cy="40" r="18" fill="%23f7d7c3"/><rect x="72" y="58" width="16" height="10" rx="3" fill="%23f7d7c3"/><rect x="52" y="68" width="56" height="64" rx="10" fill="%23ffd1c1"/><rect x="44" y="74" width="12" height="42" rx="6" fill="%23ffd1c1"/><rect x="104" y="74" width="12" height="42" rx="6" fill="%23ffd1c1"/><rect x="66" y="132" width="12" height="60" rx="6" fill="%23f7d7c3"/><rect x="82" y="132" width="12" height="60" rx="6" fill="%23f7d7c3"/></svg>',
+  male:
+    'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="320" height="420" viewBox="0 0 160 210"><rect width="160" height="210" rx="18" fill="%23e7f2ff"/><circle cx="80" cy="40" r="18" fill="%23d9c7b8"/><rect x="72" y="58" width="16" height="10" rx="3" fill="%23d9c7b8"/><rect x="52" y="68" width="56" height="64" rx="10" fill="%23cfe4ff"/><rect x="44" y="74" width="12" height="42" rx="6" fill="%23cfe4ff"/><rect x="104" y="74" width="12" height="42" rx="6" fill="%23cfe4ff"/><rect x="66" y="132" width="12" height="60" rx="6" fill="%23d9c7b8"/><rect x="82" y="132" width="12" height="60" rx="6" fill="%23d9c7b8"/></svg>',
+};
+
+// ключевые слова из текста → “картинки” (SVG data URI)
+const ITEM_SRC = {
+  // топы
+  "свитшот": 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="128" height="128"><rect width="128" height="128" rx="18" fill="%23fff"/><rect x="24" y="40" width="80" height="52" rx="12" fill="%23f3a7a7"/><rect x="18" y="44" width="14" height="34" rx="7" fill="%23f3a7a7"/><rect x="96" y="44" width="14" height="34" rx="7" fill="%23f3a7a7"/></svg>',
+  "свитер":  'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="128" height="128"><rect width="128" height="128" rx="18" fill="%23fff"/><rect x="24" y="42" width="80" height="52" rx="12" fill="%23d7a97a"/><rect x="48" y="38" width="32" height="10" rx="5" fill="%23c9955d"/></svg>',
+  "рубашк": 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="128" height="128"><rect width="128" height="128" rx="18" fill="%23fff"/><rect x="24" y="42" width="80" height="52" rx="6" fill="%23b7d7ff"/><rect x="60" y="40" width="8" height="54" fill="%23fff"/><circle cx="64" cy="56" r="2" fill="%2399bce6"/><circle cx="64" cy="68" r="2" fill="%2399bce6"/><circle cx="64" cy="80" r="2" fill="%2399bce6"/></svg>',
+  "худи":    'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="128" height="128"><rect width="128" height="128" rx="18" fill="%23fff"/><rect x="24" y="44" width="80" height="50" rx="12" fill="%2399c2ff"/><circle cx="64" cy="46" r="10" fill="%2399c2ff"/></svg>',
+
+  // верхняя одежда
+  "плащ":    'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="128" height="128"><rect width="128" height="128" rx="18" fill="%23fff"/><path d="M40 36h48l10 70H30z" fill="%23d9b38c"/></svg>',
+  "тренч":   'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="128" height="128"><rect width="128" height="128" rx="18" fill="%23fff"/><path d="M40 36h48l10 70H30z" fill="%23d9b38c"/></svg>',
+  "джинсовк":'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="128" height="128"><rect width="128" height="128" rx="18" fill="%23fff"/><rect x="30" y="40" width="68" height="60" rx="6" fill="%2399b9ff"/></svg>',
+  "парка":   'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="128" height="128"><rect width="128" height="128" rx="18" fill="%23fff"/><rect x="32" y="38" width="64" height="66" rx="10" fill="%2380a06b"/></svg>',
+
+  // низ
+  "джинс":   'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="128" height="128"><rect width="128" height="128" rx="18" fill="%23fff"/><rect x="44" y="40" width="16" height="68" rx="6" fill="%234a7bdc"/><rect x="68" y="40" width="16" height="68" rx="6" fill="%234a7bdc"/></svg>',
+  "чинос":   'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="128" height="128"><rect width="128" height="128" rx="18" fill="%23fff"/><rect x="44" y="42" width="16" height="66" rx="6" fill="%23c6a66a"/><rect x="68" y="42" width="16" height="66" rx="6" fill="%23c6a66a"/></svg>',
+
+  // обувь
+  "ботинк":  'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="128" height="128"><rect width="128" height="128" rx="18" fill="%23fff"/><rect x="34" y="84" width="60" height="18" rx="6" fill="%23545454"/><rect x="28" y="98" width="72" height="8" rx="4" fill="%23333333"/></svg>',
+  "кеды":    'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="128" height="128"><rect width="128" height="128" rx="18" fill="%23fff"/><rect x="36" y="92" width="56" height="10" rx="5" fill="%238c9cff"/></svg>',
+  "сапог":   'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="128" height="128"><rect width="128" height="128" rx="18" fill="%23fff"/><rect x="34" y="80" width="60" height="20" rx="6" fill="%23545454"/></svg>',
+
+  // аксессуары
+  "шарф":    'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="128" height="128"><rect width="128" height="128" rx="18" fill="%23fff"/><rect x="42" y="40" width="44" height="16" rx="8" fill="%23ffb3b3"/><rect x="56" y="56" width="14" height="36" rx="6" fill="%23ffb3b3"/></svg>',
+  "шапк":    'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="128" height="128"><rect width="128" height="128" rx="18" fill="%23fff"/><path d="M44 68h40a16 16 0 00-40 0z" fill="%23ffcf86"/></svg>',
+  "зонт":    'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="128" height="128"><rect width="128" height="128" rx="18" fill="%23fff"/><path d="M24 64h80a40 40 0 00-80 0z" fill="%2399c2ff"/><rect x="62" y="64" width="4" height="40" rx="2" fill="%23333"/></svg>',
+};
+
+function outfitTextToImages(text) {
+  const t = (text || "").toLowerCase();
+  const added = new Set();
+  const imgs = [];
+  Object.entries(ITEM_SRC).forEach(([key, uri]) => {
+    if (t.includes(key) && !added.has(uri)) { imgs.push(uri); added.add(uri); }
+  });
+  return imgs;
+}
+
+// Панель аватара + иконки вещей
+function AvatarPanel({ gender, season, outfitText }) {
+  const images = outfitTextToImages(outfitText);
+  return (
+    <div className="grid grid-cols-2 gap-6">
+      <div className={`relative rounded-3xl p-5 shadow-lg ${SEASON_THEME[season].chip} flex items-center justify-center`}>
+        <img
+          src={gender === "female" ? AVATAR_SRC.female : AVATAR_SRC.male}
+          alt=""
+          className="w-40 md:w-48 object-contain select-none pointer-events-none"
+        />
+      </div>
+      <div className="grid grid-cols-2 md:grid-cols-3 gap-3 content-start">
+        {images.map((src, i) => (
+          <div key={i} className="w-20 h-20 md:w-24 md:h-24 rounded-xl bg-white/95 shadow flex items-center justify-center overflow-hidden">
+            <img src={src} alt="" className="max-w-full max-h-full object-contain" />
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
 export default function OutfityApp() {
   const { weather, loading } = useWeather(useGeolocation());
   const [gender, setGender] = useState("female");
