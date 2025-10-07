@@ -248,7 +248,7 @@ export default function OutfityApp() {
 
         {/* Рекомендация */}
         <section className="bg-white/85 backdrop-blur rounded-3xl p-6 md:p-8 shadow-lg flex flex-col">
-          <h2 className="text-2xl md:text-3xl font-semibold mb-4">Рекомендованный лук</h2>
+          <h2 className="text-2xl md:text-3xl font-semibold mb-4">Рекомендованный outfit</h2>
           <div className="grid md:grid-cols-2 gap-6 items-start">
             <div>
               <p className="text-base md:text-lg leading-relaxed break-words"><b>Описание:</b> {rec?.outfit}</p>
