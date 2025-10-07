@@ -145,11 +145,11 @@ const IconPrecip = () => (
 function InfoTile({ label, value, icon }) {
   return (
     <div className="rounded-2xl p-4 bg-white border border-white/60 shadow-sm select-none">
-      <div className="flex items-center gap-2 text-[11px] md:text-xs uppercase tracking-wide opacity-60">
+      <div className="flex items-center gap-2 text-[10px] md:text-[11px] uppercase tracking-wide opacity-60">
         {icon}
         <span className="whitespace-nowrap">{label}</span>
       </div>
-      <div className="text-[20px] md:text-[24px] font-semibold mt-1 leading-snug whitespace-normal break-words max-w-[18rem]">
+      <div className="text-[17px] md:text-[20px] font-semibold mt-1 leading-tight break-keep whitespace-nowrap overflow-hidden text-ellipsis">
         {value}
       </div>
     </div>
