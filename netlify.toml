@@ -1,1 +1,32 @@
-[build]\n  command = 'npm run build'\n  publish = 'dist'\n  functions = 'netlify/functions'\n\n[[redirects]]\n  from = '/api/weather'\n  to = '/.netlify/functions/weather'\n  status = 200\n
+// netlify/functions/weather.js
+export async function handler(event) {
+  try {
+    const { lat, lon } = event.queryStringParameters || {};
+    if (!lat || !lon) return { statusCode: 400, body: "lat & lon required" };
+
+    // 1) Запрос к Open-Meteo без ключа
+    const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current_weather=true&hourly=relativehumidity_2m,precipitation`;
+    const res = await fetch(url);
+    if (!res.ok) return { statusCode: res.status, body: await res.text() };
+    const om = await res.json();
+
+    // 2) Приводим к «формату Яндекса», который ждёт фронт
+    // Open-Meteo: current_weather { temperature, windspeed, weathercode }, hourly.relativehumidity_2m[0]
+    const fact = {
+      temp: Math.round(om.current_weather?.temperature ?? 12),                    // °C
+      wind_speed: Number(om.current_weather?.windspeed ?? 3),                     // м/с (у OM м/с)
+      humidity: Number(om.hourly?.relativehumidity_2m?.[0] ?? 70),               // %
+      // простая мапа осадков: если precipitation в ближайший час > 0 — считаем как дождь
+      prec_type: (om.hourly?.precipitation?.[0] ?? 0) > 0 ? 1 : 0,               // 0-нет, 1-дождь
+      condition: (om.hourly?.precipitation?.[0] ?? 0) > 0 ? "rain" : "clear",
+    };
+
+    return {
+      statusCode: 200,
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ fact }),
+    };
+  } catch (e) {
+    return { statusCode: 500, body: JSON.stringify({ error: String(e) }) };
+  }
+}
