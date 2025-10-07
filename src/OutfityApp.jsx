@@ -142,9 +142,18 @@ const IconPrecip = () => (
   </svg>
 );
 
-function InfoTile({ label, value, icon, className = "" }) {
+function InfoTile({ label, value, icon, className = "", season = "autumn" }) {
+  const seasonStyles = {
+    autumn: "bg-[#fff7ef] shadow-[0_4px_12px_rgba(255,140,0,0.15)]",
+    winter: "bg-[#f2f7ff] shadow-[0_4px_12px_rgba(0,90,255,0.12)]",
+    spring: "bg-[#fff5f8] shadow-[0_4px_12px_rgba(255,0,122,0.12)]",
+    summer: "bg-[#f5fff1] shadow-[0_4px_12px_rgba(0,200,0,0.12)]",
+  };
+
   return (
-    <div className={`flex flex-col justify-between rounded-2xl p-4 bg-white border border-white/60 shadow-sm select-none w-full ${className}`}>
+    <div
+      className={`flex flex-col justify-between rounded-2xl p-4 border border-white/50 select-none transition-all duration-300 hover:shadow-lg hover:scale-[1.02] ${seasonStyles[season]} ${className}`}
+    >
       <div className="flex items-center gap-2 text-[11px] md:text-[12px] uppercase tracking-wide opacity-60">
         {icon}
         <span className="whitespace-nowrap">{label}</span>
